@@ -1,84 +1,52 @@
-// controllers/productosController.js
-const Producto = require('../models/producto');
+const ProductosService = require("../services/productos.services");
+const asyncHandler = require("../middlewares/async-handler");
+const http = require("../helpers/http");
 
-exports.getProductos = async (req, res) => {
-  try {
-    const productos = await Producto.find();
-    res.json(productos);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+const getProductos = asyncHandler(async (req, res) => {
+  const params = req.query;
+  const productos = await ProductosService.getProductos(params);
+  return http.response200(res, productos);
+});
+
+const getProducto = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const producto = await ProductosService.getProducto(id);
+  return http.response200(res, producto);
+});
+
+const createProducto = asyncHandler(async (req, res) => {
+  const payload = req.body;
+
+  if (!payload.nombre || !payload.descripcion || !payload.costo || !payload.precio_venta) {
+    return http.response400(res, {}, "Datos del producto incompletos");
   }
-};
 
-exports.getProducto = async (req, res) => {
-  try {
-    const producto = await Producto.findById(req.params.id);
-    if (producto == null) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
-    }
-    res.json(producto);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  const producto = await ProductosService.createProducto(payload);
+  return http.response201(res, producto);
+});
+
+const updateProducto = asyncHandler(async (req, res) => {
+  const payload = req.body;
+  payload.id = req.params.id;
+
+  if (!payload.nombre && !payload.descripcion && !payload.costo && !payload.precio_venta) {
+    return http.response400(res, {}, "No hay datos para actualizar");
   }
-};
 
-exports.createProducto = async (req, res) => {
-  const producto = new Producto({
-    fk_empresa: req.body.fk_empresa,
-    nombre: req.body.nombre,
-    descripcion: req.body.descripcion,
-    costo: req.body.costo,
-    precio_venta: req.body.precio_venta
-  });
+  const producto = await ProductosService.updateProducto(payload);
+  return http.response200(res, producto);
+});
 
-  try {
-    const newProducto = await producto.save();
-    res.status(201).json(newProducto);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+const deleteProducto = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  await ProductosService.deleteProducto(id);
+  return http.response200(res, { message: "Producto eliminado correctamente" });
+});
 
-exports.updateProducto = async (req, res) => {
-  try {
-    const producto = await Producto.findById(req.params.id);
-    if (producto == null) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
-    }
-
-    if (req.body.fk_empresa != null) {
-      producto.fk_empresa = req.body.fk_empresa;
-    }
-    if (req.body.nombre != null) {
-      producto.nombre = req.body.nombre;
-    }
-    if (req.body.descripcion != null) {
-      producto.descripcion = req.body.descripcion;
-    }
-    if (req.body.costo != null) {
-      producto.costo = req.body.costo;
-    }
-    if (req.body.precio_venta != null) {
-      producto.precio_venta = req.body.precio_venta;
-    }
-
-    const updatedProducto = await producto.save();
-    res.json(updatedProducto);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-exports.deleteProducto = async (req, res) => {
-  try {
-    const producto = await Producto.findById(req.params.id);
-    if (producto == null) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
-    }
-
-    await producto.remove();
-    res.json({ message: 'Producto eliminado' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+module.exports = {
+  getProductos,
+  getProducto,
+  createProducto,
+  updateProducto,
+  deleteProducto,
 };

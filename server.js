@@ -2,23 +2,31 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const config = require("config");
 const colors = require("colors");
 const bodyParser = require("body-parser");
+const sequelize = require('./config/database'); // Importa la conexión de la base de datos
 
 class Server {
   constructor() {
     this.init();
     this.app = express();
-    this.port = process.env.PORT;
-    this.host = process.env.HOST;
+    this.port = process.env.PORT || 3000;
+    this.host = process.env.HOST || 'localhost';
     this.middlewares();
     this.routes();
     this.errorHandler();
   }
 
-  init() {
+  async init() {
     dotenv.config();
+
+    try {
+      // Sincroniza todos los modelos con la base de datos
+      await sequelize.sync();
+      console.log('Database connected successfully');
+    } catch (error) {
+      console.error('Unable to connect to the database:', error);
+    }
   }
 
   middlewares() {
@@ -27,10 +35,9 @@ class Server {
     };
 
     this.app.use(cors(corsOptions));
-    this.app.use(bodyParser.urlencoded({extended: true}))
-    this.app.use(bodyParser.json())
+    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(bodyParser.json());
     this.app.use(morgan("combined"));
-    
   }
 
   routes() {
@@ -44,7 +51,7 @@ class Server {
   listen() {
     const server = this.app.listen(this.port, this.host, (err) => {
       if (err) {
-        console.log("entra para cerrar el proces")
+        console.log("entra para cerrar el proces");
         console.log(err);
         process.exit(1);
       }
