@@ -21,9 +21,12 @@ class Server {
     dotenv.config();
 
     try {
+      // Autentica la conexión con la base de datos
+      await sequelize.authenticate();
+      console.log('Database authenticated successfully');
       // Sincroniza todos los modelos con la base de datos
       await sequelize.sync();
-      console.log('Database connected successfully');
+      console.log('Database synchronized successfully');
     } catch (error) {
       console.error('Unable to connect to the database:', error);
     }
@@ -51,8 +54,8 @@ class Server {
   listen() {
     const server = this.app.listen(this.port, this.host, (err) => {
       if (err) {
-        console.log("entra para cerrar el proces");
-        console.log(err);
+        console.log("Error al iniciar el servidor:");
+        console.error(err);
         process.exit(1);
       }
 

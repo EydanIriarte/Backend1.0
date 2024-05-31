@@ -1,8 +1,9 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('database', 'usuario', 'contraseña', {
+const sequelize = new Sequelize('Backend', 'postgres', 'aleatorio123', {
   host: 'localhost',
-  dialect: 'mysql' // Especifica el dialecto de la base de datos que estás utilizando
+  dialect: 'postgres', // Cambia el dialecto a 'postgres'
+  port: 3000, // El puerto predeterminado de PostgreSQL es 5432
 });
 
 // Prueba de conexión a la base de datos
