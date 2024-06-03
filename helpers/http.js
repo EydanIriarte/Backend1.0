@@ -1,5 +1,4 @@
 const response200 = (res, data = {}, message = "Operación exitosa") => {
-
   return res.status(200).json({
     success: true,
     message: message,
@@ -12,8 +11,7 @@ const response201 = (
   data = {},
   message = "Registro creado exitosamente"
 ) => {
-
-  return res.status(200).json({
+  return res.status(201).json({
     success: true,
     message: message,
     data: data,
@@ -25,7 +23,6 @@ const response400 = (
   data = {},
   message = "Solicitud incorrecta"
 ) => {
-
   return res.status(400).json({
     success: false,
     message: message,
@@ -33,15 +30,13 @@ const response400 = (
   });
 };
 
-
 const response500 = (
   res,
   data = {},
   message = "Ha ocurrido un error"
 ) => {
-
   return res.status(500).json({
-    success: true,
+    success: false,
     message: message,
     data: data,
   });
