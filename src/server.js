@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-const { sequelize } = require('../models'); // Asegúrate de requerir sequelize desde models/index.js
+const { sequelize } = require('../models/index');
 
 class server {
   constructor() {
@@ -14,7 +14,7 @@ class server {
     this.middlewares();
     this.routes();
     this.errorHandler();
-    this.syncDatabase(); // Sincroniza la base de datos al iniciar el servidor
+    this.syncDatabase();
   }
 
   init() {
@@ -34,7 +34,11 @@ class server {
 
   routes() {
     this.app.use("../routes/productos.routes");
-    // Agrega aquí las rutas de otras entidades
+    this.app.use("../routes/empresas.routes");
+    this.app.use("../routes/inventario.routes");
+    this.app.use("../routes/usuarios.routes");
+    this.app.use("../routes/ventas.routes");
+
   }
 
   errorHandler() {
@@ -43,7 +47,7 @@ class server {
 
   async syncDatabase() {
     try {
-      await sequelize.sync({ force: true }); // Usa { force: true } solo para desarrollo
+      await sequelize.sync({ force: true });
       console.log('Database synced successfully.');
     } catch (error) {
       console.error('Error syncing database:', error);
