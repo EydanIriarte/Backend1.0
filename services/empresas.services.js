@@ -9,11 +9,21 @@ const getEmpresaById = async (id) => {
 };
 
 const createEmpresa = async (empresaData) => {
-  return await Empresa.create(empresaData);
+console.log(empresaData)
+
+  return await Empresa.create({
+    nombre: empresaData.nombre,
+    direccion: empresaData.direccion,
+    info_contacto: empresaData.info_contacto
+  });
 };
 
 const updateEmpresa = async (id, empresaData) => {
-  await Empresa.update(empresaData, {
+  await Empresa.update({
+    nombre: empresaData.nombre,
+    direccion: empresaData.direccion,
+    info_contacto: empresaData.info_contacto
+  }, {
     where: {
       id: id
     }

@@ -3,9 +3,9 @@ const router = express.Router();
 const EmpresasController = require("../controllers/empresas.controller");
 
 router.get("/", EmpresasController.getEmpresas);
-router.get("/:id", EmpresasController.getProducto);
-router.post("/", EmpresasController.createProducto);
-router.put("/:id", EmpresasController.updateProducto);
-router.delete("/:id", EmpresasController.deleteProducto);
+router.get("/:id", EmpresasController.getEmpresa);
+router.post("/", EmpresasController.createEmpresa);
+router.put("/:id", EmpresasController.updateEmpresa);
+router.delete("/:id", EmpresasController.deleteEmpresa);
 
 module.exports = router;

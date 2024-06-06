@@ -1,27 +1,51 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.js');
+"use strict";
 
-const Inventario = sequelize.define('Inventario', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  fk_producto: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  cantidad: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  fecha: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-}, {
-  timestamps: false,
-  tableName: 'inventario',
-});
+const { QueryTypes } = require("sequelize");
 
-module.exports = Inventario;
+module.exports = (sequelize, DataTypes) => {
+  const Inventario = sequelize.define(
+    "Inventario",
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      fk_producto: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      cantidad: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      fecha: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+    },
+    {
+      timestamps: false,
+      tableName: "inventario",
+    }
+  );
+
+  Inventario.getInventarios = async (params) => {
+    const query = ``; // Aquí puedes definir tu consulta personalizada
+    return await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+    });
+  };
+
+  Inventario.associate = function (models) {
+    // Aquí puedes definir las asociaciones con otros modelos
+    // Ejemplo:
+    // Inventario.belongsTo(models.Producto, {
+    //   foreignKey: "fk_producto",
+    //   as: "producto",
+    // });
+  };
+
+  return Inventario;
+};

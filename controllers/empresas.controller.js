@@ -33,7 +33,7 @@ const updateEmpresa = asyncHandler(async (req, res) => {
     return http.response400(res, {}, "No hay datos para actualizar");
   }
 
-  const empresa = await EmpresasService.updateEmpresa(payload);
+  const empresa = await EmpresasService.updateEmpresa(payload.id, payload);
   return http.response200(res, empresa);
 });
 
