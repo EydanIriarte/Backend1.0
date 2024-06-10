@@ -16,15 +16,12 @@ const getEmpresa = asyncHandler(async (req, res) => {
 
 const createEmpresa = asyncHandler(async (req, res) => {
   const payload = req.body;
-
   if (!payload.nombre || !payload.direccion || !payload.info_contacto) {
     return http.response400(res, {}, "Datos de la empresa incompletos");
   }
-
   const empresa = await EmpresasService.createEmpresa(payload);
   return http.response201(res, empresa);
 });
-
 const updateEmpresa = asyncHandler(async (req, res) => {
   const payload = req.body;
   payload.id = req.params.id;

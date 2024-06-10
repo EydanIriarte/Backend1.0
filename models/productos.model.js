@@ -17,12 +17,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       descripcion: {
-        allowNull: true,
-        type: DataTypes.TEXT,
+        allowNull: false,
+        type: DataTypes.STRING,
       },
       precio: {
         allowNull: false,
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
       },
       stock: {
         allowNull: false,
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      timestamps: true,
+      timestamps: false,
       tableName: "productos",
     }
   );

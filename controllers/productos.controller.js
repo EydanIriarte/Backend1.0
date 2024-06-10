@@ -3,7 +3,8 @@ const asyncHandler = require("../middlewares/async-handler");
 const http = require("../helpers/http");
 
 const getProductos = asyncHandler(async (req, res) => {
-  const productos = await ProductosService.getProductos();
+  const params = req.query;
+  const productos = await ProductosService.getProductos(params);
   return http.response200(res, productos);
 });
 
@@ -18,6 +19,11 @@ const getProducto = asyncHandler(async (req, res) => {
 
 const createProducto = asyncHandler(async (req, res) => {
   const payload = req.body;
+  
+  if (!payload.nombre || !payload.descripcion || !payload.precio) {
+    return http.response400(res, {}, "Datos del producto incompletos");
+  }
+
   const producto = await ProductosService.createProducto(payload);
   return http.response201(res, producto);
 });
@@ -25,6 +31,11 @@ const createProducto = asyncHandler(async (req, res) => {
 const updateProducto = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const payload = req.body;
+  
+  if (!payload.nombre && !payload.descripcion && !payload.precio) {
+    return http.response400(res, {}, "No hay datos para actualizar");
+  }
+
   const producto = await ProductosService.updateProducto(id, payload);
   if (!producto) {
     return http.response400(res, {}, "Producto no encontrado");

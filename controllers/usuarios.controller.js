@@ -10,7 +10,7 @@ const getUsuarios = asyncHandler(async (req, res) => {
 
 const getUsuario = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const usuario = await UsuariosService.getUsuario(id);
+  const usuario = await UsuariosService.getUsuarios(id);
   return http.response200(res, usuario);
 });
 

@@ -10,7 +10,7 @@ const getVentas = asyncHandler(async (req, res) => {
 
 const getVenta = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const venta = await VentasService.getVenta(id);
+  const venta = await VentasService.getVentas(id);
   return http.response200(res, venta);
 });
 

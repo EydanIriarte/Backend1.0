@@ -9,7 +9,11 @@ const getUsuarioById = async (id) => {
 };
 
 const createUsuario = async (usuarioData) => {
-  return await Usuario.create(usuarioData);
+  return await Usuario.create({
+    nombre: usuarioData.nombre,
+    email: usuarioData.email,
+    password: usuarioData.password,
+  });
 };
 
 const updateUsuario = async (id, usuarioData) => {

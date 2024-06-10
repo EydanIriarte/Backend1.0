@@ -13,14 +13,19 @@ const createInventario = async (inventarioData) => {
 };
 
 const updateInventario = async (id, inventarioData) => {
-  await Inventario.update(inventarioData, {
-    where: {
-      id: id
-    }
+  const updatedRows = await Inventario.update(inventarioData, {
+    where: { id: id },
+    returning: true, // Esto es importante para que retorne los registros actualizados
   });
-  return await Inventario.findByPk(id);
+
+  if (updatedRows[0] === 0) {
+    return null; // Si no se actualiza ningún registro, devuelve null
+  }
+
+  return updatedRows[1][0]; // Devuelve el primer registro actualizado
 };
 
+    
 const deleteInventario = async (id) => {
   return await Inventario.destroy({
     where: {

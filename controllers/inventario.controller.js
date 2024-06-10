@@ -26,15 +26,21 @@ const createInventario = asyncHandler(async (req, res) => {
 });
 
 const updateInventario = asyncHandler(async (req, res) => {
-  const payload = req.body;
-  payload.id = req.params.id;
+  const id = req.params.id;
+  const inventarioData = {
+    cantidad: req.body.cantidad // Solo actualizas la cantidad
+  };
 
-  if (!payload.fk_producto && !payload.cantidad && !payload.fecha) {
-    return http.response400(res, {}, "No hay datos para actualizar");
+  try {
+    const inventario = await InventarioService.updateInventario(id, inventarioData);
+    if (!inventario) {
+      return http.response404(res, {}, "Inventario no encontrado");
+    }
+    return http.response200(res, inventario);
+  } catch (error) {
+    console.error('Error actualizando el inventario:', error);
+    return http.response500(res, {}, "Ocurrió un error en el servidor");
   }
-
-  const inventario = await InventarioService.updateInventario(payload);
-  return http.response200(res, inventario);
 });
 
 const deleteInventario = asyncHandler(async (req, res) => {
